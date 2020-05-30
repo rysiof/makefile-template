@@ -28,7 +28,7 @@ seed = int(sys.argv[1]) # how many file
 target = sys.argv[2]
 
 os.system("mkdir src")
-os.system("mkdir src/{target}".format(target=target))
+os.system("mkdir " + os.path.join("src", target))
 
 template_h = """#ifndef DIR_{idx}_H
 #define DIR_{idx}_H
@@ -76,17 +76,18 @@ main_calls = "int main(){{\n"
 main_ends = "}}"
 
 for i in range(seed):
-    os.system("mkdir src/{target}/dir_{idx}".format(target=target, idx=i))
-    f = open("src/{target}/dir_{idx}/f_{idx}.h".format(target=target, idx=i), "w")
+    dir = os.path.join("src", target, "dir_{idx}".format(idx=i))
+    os.system("mkdir " + dir)
+    f = open(os.path.join(dir, "f_{idx}.h".format(idx=i)), "w")
     f.write(template_h.format(idx=i));
     f.close()
 
     for t in ["cc", "cxx", "cpp"]:
-        f = open("src/{target}/dir_{idx}/{type}_{idx}.cc".format(target=target, idx=i, type=t), "w")
+        f = open(os.path.join(dir, "{type}_{idx}.{type}".format(type=t,idx=i)), "w")
         f.write(template_cc.format(idx=i, type=t));
         f.close()
 
-    f = open("src/{target}/dir_{idx}/c_{idx}.cc".format(target=target,idx=i), "w")
+    f = f = open(os.path.join(dir, "c_{idx}.c".format(idx=i)), "w")
     f.write(template_c.format(idx=i));
     f.close()
 
@@ -96,10 +97,10 @@ for i in range(seed):
         main_calls += "\t{type}_{idx}();\n".format(idx=i, type=t)
     main_calls += "\tc_{idx}();\n".format(idx=i)
 
-f = open("src/{target}/main.cc".format(target=target, idx=i), "w")
+f = open(os.path.join("src", target, "main.cc"), "w")
 f.write(main_headers + main_calls + main_ends)
 f.close()
 
-f = open("src/{target}/common.h".format(target=target, idx=i), "w")
+f = open(os.path.join("src", target, "common.h"), "w")
 f.write("")
 f.close()
