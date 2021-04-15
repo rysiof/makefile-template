@@ -11,6 +11,8 @@ How to use this framework:
    - make X                          # default config release, default platform x86
    - make X CFG=release/debug        # override config
    - make X PLATFORM=Y               # override platform
+   - make X QUIET=true               # if you don't want to display compilation commands
+   > You can combine all of them!
 4. Clean your project:
    - make clean_X                    # default config release, default platform x86
    - make clean_X CFG=release/debug  # override config
